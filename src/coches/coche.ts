@@ -1,4 +1,5 @@
-export class Coche {
+export {Vehiculo} 
+class Vehiculo {
     private _matricula : string
     private _consumo : number 
     private _arrancar : boolean

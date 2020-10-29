@@ -1,9 +1,9 @@
-import { Coche } from './coches/coche'
+import { Vehiculo } from './coches/coche'
 import { menu, menucoche } from './vistas/menuPral'
 import { leerTeclado } from './vistas/entradaTeclado'
 
 const main = async() => {
-    let coches: Array<Coche> = new Array()
+    let coches: Array<Vehiculo> = new Array()
     let num: number 
     do {
         num = await menu()
@@ -11,9 +11,9 @@ const main = async() => {
             case 1:
                 console.log('Usted está creando un nuevo coche')
                 let matricula:string , consumo:number
-                matricula=await leerTeclado('Por favor, introduzca la matrícula del coche (ejemplo: 1111BBB)')
+                matricula=await leerTeclado('Por favor, introduzca la matrícula del coche (ejemplo: 0000AAA)')
                 consumo = parseInt( await leerTeclado('Por favor, introduzca el consumo del vehículo (L por 100KM)'))
-                let coche=new Coche(matricula, consumo)
+                let coche=new Vehiculo(matricula, consumo)
                 let exist = false
                 coches.forEach(Coche => {
                     if (coche.matricula==Coche.matricula){
@@ -24,6 +24,7 @@ const main = async() => {
                     console.log('ERROR: el coche ya está creado!')
                 } else{
                     coches.push(coche)
+                    console.log('Coche creado correctamente')
                 }
                 break
 
@@ -37,7 +38,7 @@ const main = async() => {
                         console.log(`${Coche.mostrarCoches()}`)
                     });
                     let m2:String
-                    m2=await leerTeclado('Por favor, Introduzca la matrícula del coche a borrar:')
+                    m2=await leerTeclado('Por favor, Introduzca la matrícula del coche a borrar')
                     let e:boolean=false
                     let index=0
                     coches.forEach(Coche => {
@@ -45,6 +46,7 @@ const main = async() => {
                             index=coches.indexOf(Coche)
                             e=true
                         }
+                        console.log('ATENCIÓN: coche borrado!')
                     })
                     if (e){
                        coches.splice(index,1)

@@ -1,52 +1,43 @@
-import { Coche } from './models/coche'
-import { menu, menu2 } from './utility/menu'
-import { leerTeclado } from './utility/lecturaTeclado'
+import { Coche } from './coches/coche'
+import { menu, menucoche } from './vistas/menuPral'
+import { leerTeclado } from './vistas/entradaTeclado'
 
 const main = async() => {
     let coches: Array<Coche> = new Array()
-    let n: number 
+    let num: number 
     do {
-        n = await menu()
-        switch(n){
+        num = await menu()
+        switch(num){
             case 1:
                 console.log('Usted está creando un nuevo coche')
                 let matricula:string , consumo:number
-                matricula=await leerTeclado('Introduzca la matrícula del coche (XXXXNNN)')
-                consumo = parseInt( await leerTeclado('Introduzca el consumo del vehículo(Litros cada 100KM)'))
+                matricula=await leerTeclado('Por favor, introduzca la matrícula del coche (ejemplo: 1111BBB)')
+                consumo = parseInt( await leerTeclado('Por favor, introduzca el consumo del vehículo (L por 100KM)'))
                 let coche=new Coche(matricula, consumo)
-                let existe = false
+                let exist = false
                 coches.forEach(Coche => {
                     if (coche.matricula==Coche.matricula){
-                        existe=true
+                        exist=true
                     }
                 });
-                if (existe){
-                    console.log('Este coche ya existe')
+                if (exist){
+                    console.log('ERROR: el coche ya está creado!')
                 } else{
                     coches.push(coche)
                 }
                 break
+
             case 2:
+                console.log('ATENCIÓN: va a borrar un coche')
                 if (coches.length==0){
-                    console.log('No existen coches creados')
+                    console.log('ERROR: No existen coches!')
                 } else {
-                    console.log('Usted está imprimiendo los coches')
+                    console.log('lista de coches:')
                     coches.forEach(Coche => {
-                        console.log(`${Coche.imprimirCoche()}`)
-                    });
-                }
-                break
-            case 3:
-                console.log('Usted va a borrar un coche')
-                if (coches.length==0){
-                    console.log('No existen coches creados')
-                } else {
-                    console.log('Estos son los coches que existen')
-                    coches.forEach(Coche => {
-                        console.log(`${Coche.imprimirCoche()}`)
+                        console.log(`${Coche.mostrarCoches()}`)
                     });
                     let m2:String
-                    m2=await leerTeclado('Introduzca la matrícula del coche que quiera borrar')
+                    m2=await leerTeclado('Por favor, Introduzca la matrícula del coche a borrar:')
                     let e:boolean=false
                     let index=0
                     coches.forEach(Coche => {
@@ -58,79 +49,90 @@ const main = async() => {
                     if (e){
                        coches.splice(index,1)
                     } else {
-                        console.log('No existe ese coche')
+                        console.log('ERROR: coche inexistente!')
                     }
                 }
                 break
+
+            case 3:
+                if (coches.length==0){
+                    console.log('ERROR: no existen coches!')
+                } else {
+                    console.log('Mostrando coches')
+                    coches.forEach(Coche => {
+                        console.log(`${Coche.mostrarCoches()}`)
+                    });
+                }
+                break
+
             case 4:
                 if (coches.length==0){
-                    console.log('No existen coches creados')
+                    console.log('ERROR: No existen coches!')
                 } else {
                     let m1:string
-                    console.log('Elija usted la matrícula de un coche')
+                    console.log('Por favor, elija una matrícula de un coche')
                     coches.forEach(Coche => {
-                        console.log(`${Coche.imprimirCoche()}`)
+                        console.log(`${Coche.mostrarCoches()}`)
                     });
-                    m1=await leerTeclado('Introduzca la matrícula del coche')
+                    m1=await leerTeclado('Por favor, introduzca la matrícula de un coche')
                     let index:number=-1
                     coches.forEach(Coche => {
                         if(Coche.matricula==m1){
                            index=coches.indexOf(Coche)
                         }else{
-                            console.log('Este coche no existe')
+                            console.log('ERROR: coche inexistente!')
                         }
                     });
                     if(index!=-1){
-                        let n2:number
+                        let num2:number
                         do {
-                            n2 = await menu2()
-                            switch(n2){
+                            num2 = await menucoche()
+                            switch(num2){
                                 case 1:
-                                    console.log('Viendo el coche elegido')
-                                    console.log(coches[index].imprimirCoche())
+                                    console.log('Mostrando el coche seleccionado...')
+                                    console.log(coches[index].mostrarCoches())
                                     break
                                 case 2:
-                                    if(coches[index].arrancado){
+                                    if(coches[index].arrancar){
                                         console.log('Apagando coche')
-                                        coches[index].botonArrancado()
+                                        coches[index].arrancarCoche()
                                     }else{
                                         console.log('Encendiendo coche')
-                                        coches[index].botonArrancado()
+                                        coches[index].arrancarCoche()
                                     }
                                     break
                                 case 3:
-                                    let v:number
-                                    v=parseInt(await leerTeclado("Introduzca la nueva velocidad del vehículo"))
+                                    let vel:number
+                                    vel=parseInt(await leerTeclado("Por favor, introduzca la velocidad del vehículo"))
                                     try {
-                                      coches[index].velocidad=v 
+                                      coches[index].velocidad=vel 
                                     } catch (error) {
                                         console.log(error)
                                     }
                                     break
                                 case 4:
-                                    let t:number
-                                    t=parseInt(await leerTeclado("Introduzca el tiempo en horas que lleva el vehículo a la velocidad actual"))
-                                    console.log(`${coches[index].consumido(t)}`)
+                                    let horas:number
+                                    horas=parseInt(await leerTeclado("Por favor, introduzca las horas que lleva circulando a la velocidad actual"))
+                                    console.log(`${coches[index].consumido(horas)}`)
                                     break
                                 case 0:
-                                    console.log('\n--VOLVIENDO A LA LISTA DE COCHES--')
+                                    console.log('Listado de coches...')
                                     break
                                 default:
-                                    console.log("Opción incorrecta")
+                                    console.log("ERROR: opción incorrecta")
                                     break
                             }
-                        } while (n2!=0);
+                        } while (num2!=0);
                     }
                 }
                 break
             case 0:
-                console.log('\n--ADIÓS--')
+                console.log('Gracias por usar nuestro programa')
                 break
             default:
-                console.log("Opción incorrecta")
+                console.log("ERROR: opción incorrecta")
                 break
         }
-    } while (n!=0);
+    } while (num!=0);
 }
-
 main()

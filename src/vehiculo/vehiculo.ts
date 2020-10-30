@@ -27,7 +27,7 @@ class Vehiculo {
     arrancarCoche(){
         if(this._arrancar==false){
             this._arrancar=true
-        }else{
+        } else {
             this._arrancar=false
             this._velocidad=0
         }
@@ -44,7 +44,7 @@ class Vehiculo {
             this._velocidad=vel
         }
     }
-
+    
     consumido(horas:number){
         if(!this._arrancar || this._velocidad==0){
             throw 'ERROR: antes de calcular el consumo el coche debe estar en marcha'
@@ -52,9 +52,7 @@ class Vehiculo {
             return (this._velocidad*horas)*(this._consumo/100)
         }  
     }
-
     mostrarCoches(){
         return `El coche ${this.matricula} va a ${this._velocidad} KM/H y tiene un consumo de ${this._consumo}L cada 100 km`
     }
-
 }

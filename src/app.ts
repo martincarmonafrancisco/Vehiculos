@@ -1,4 +1,4 @@
-import { Vehiculo } from './coches/coche'
+import { Vehiculo } from './vehiculo/vehiculo'
 import { menu, menucoche } from './vistas/menuPral'
 import { leerTeclado } from './vistas/entradaTeclado'
 
